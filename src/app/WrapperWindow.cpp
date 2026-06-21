@@ -1,5 +1,6 @@
 #include "WrapperWindow.h"
 
+#include <QApplication>
 #include <QVBoxLayout>
 
 WrapperWindow::WrapperWindow(QWidget *parent) : QMainWindow(parent) {
@@ -12,8 +13,12 @@ WrapperWindow::WrapperWindow(QWidget *parent) : QMainWindow(parent) {
   m_table->setItem(0, 1, new QTableWidgetItem("Boden KG"));
   m_table->setItem(0, 2, new QTableWidgetItem("Torf"));
 
+  this->m_buttonExit = new QPushButton("&Exit", this);
+  connect(m_buttonExit, &QPushButton::clicked, qApp, &QApplication::quit);
+
   auto mainLayout = new QVBoxLayout();
   mainLayout->addWidget(this->m_table);
+  mainLayout->addWidget(this->m_buttonExit);
   centralWidget->setLayout(mainLayout);
   this->setCentralWidget(centralWidget);
 }
