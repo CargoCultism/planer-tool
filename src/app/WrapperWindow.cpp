@@ -3,6 +3,8 @@
 #include <QApplication>
 #include <QVBoxLayout>
 
+#include "DatabaseManager.h"
+
 WrapperWindow::WrapperWindow(QWidget *parent) : QMainWindow(parent) {
   auto centralWidget = new QWidget(this);
 
@@ -21,4 +23,13 @@ WrapperWindow::WrapperWindow(QWidget *parent) : QMainWindow(parent) {
   mainLayout->addWidget(this->m_buttonExit);
   centralWidget->setLayout(mainLayout);
   this->setCentralWidget(centralWidget);
+
+  DatabaseManager dbm;
+  dbm.open("/home/lr/.local/share/planer-tool/db1.sqlite");
+  auto t1 = dbm.loadAll();
+  for (const auto  &r: t1){
+    qWarning() << "r: "<<r.client;
+    m_table->setItem(1,0, new QTableWidgetItem(r.id));
+  }
+
 }
