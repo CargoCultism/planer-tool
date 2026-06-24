@@ -8,14 +8,10 @@
 WrapperWindow::WrapperWindow(QWidget *parent) : QMainWindow(parent) {
   auto centralWidget = new QWidget(this);
 
-  this->m_table = new QTableWidget(4, 3, centralWidget);
-  m_table->setHorizontalHeaderLabels({"#", "Wer", "Was"});
-  m_table->insertRow(0);
-  m_table->setItem(0, 0, new QTableWidgetItem("0"));
-  m_table->setItem(0, 1, new QTableWidgetItem("Boden KG"));
-  m_table->setItem(0, 2, new QTableWidgetItem("Torf"));
+  this->m_table = new QTableWidget(4, 4, centralWidget);
+  m_table->setHorizontalHeaderLabels({"#", "Auftragsnummer", "uuid", "Client"});
 
-  this->m_buttonExit = new QPushButton("&Exit", this);
+  this->m_buttonExit = new QPushButton("&exit", this);
   connect(m_buttonExit, &QPushButton::clicked, qApp, &QApplication::quit);
 
   auto mainLayout = new QVBoxLayout();
@@ -27,9 +23,13 @@ WrapperWindow::WrapperWindow(QWidget *parent) : QMainWindow(parent) {
   DatabaseManager dbm;
   dbm.open("/home/lr/.local/share/planer-tool/db1.sqlite");
   auto t1 = dbm.loadAll();
-  for (const auto  &r: t1){
-    qWarning() << "r: "<<r.client;
-    m_table->setItem(1,0, new QTableWidgetItem(r.id));
+  for (int row = 0; const auto &r : t1) {
+    QString tmp = QString::number(r.id);
+    m_table->setItem(row, 0, new QTableWidgetItem(tmp));
+    tmp = QString::number(r.internal_id);
+    m_table->setItem(row, 1, new QTableWidgetItem(tmp));
+    m_table->setItem(row, 2, new QTableWidgetItem(r.uuid));
+    m_table->setItem(row, 3, new QTableWidgetItem(r.client));
+    row++;
   }
-
 }
