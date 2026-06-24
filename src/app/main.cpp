@@ -2,7 +2,10 @@
 
 #include "WrapperWindow.h"
 
+#include <spdlog/spdlog.h>
+
 int main(int argc, char *argv[]) {
+  spdlog::info("Init");
   QApplication app(argc, argv);
 
   WrapperWindow wrapper;
